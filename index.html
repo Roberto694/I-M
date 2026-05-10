@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Blog Personal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER / NAVEGACIÓN
+       ============================================================ -->
+  <header>
+    <div class="nav-inner">
+      <div class="brand" onclick="loadHome()" style="cursor:pointer">
+        Mi<span>Blog</span>
+      </div>
+
+      <!-- NAV para visitantes no autenticados -->
+      <nav id="nav-guest">
+        <button class="nav-btn" onclick="showPage('login')">Iniciar sesión</button>
+        <button class="nav-btn primary" onclick="showPage('register')">Registrarse</button>
+      </nav>
+
+      <!-- NAV para usuarios autenticados -->
+      <nav id="nav-auth" class="hidden">
+        <span id="user-greeting"></span>
+        <button class="nav-btn" onclick="openEditor(null)">✦ Nuevo post</button>
+        <button class="nav-btn" onclick="doLogout()">Salir</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       PÁGINA: HOME (lista de publicaciones)
+       ============================================================ -->
+  <div id="page-home" class="page">
+
+    <div class="hero">
+      <h1 class="hero-title">Bienvenido al<br><em>Blog Personal</em></h1>
+      <p class="hero-subtitle">Lee, escribe y comparte historias que importan.</p>
+    </div>
+
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Publicaciones</h2>
+        <div style="display:flex;gap:1rem;align-items:center">
+          <span class="posts-count" id="posts-count"></span>
+          <span id="new-post-btn-wrap"></span>
+        </div>
+      </div>
+
+      <div class="posts-grid" id="posts-grid">
+        <!-- Renderizado por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PÁGINA: DETALLE del post
+       ============================================================ -->
+  <div id="page-detail" class="page">
+    <div class="container">
+      <div class="post-detail" id="post-detail-content">
+        <!-- Renderizado por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PÁGINA: EDITOR (crear / editar)
+       ============================================================ -->
+  <div id="page-editor" class="page">
+    <div class="container">
+      <div class="editor-wrap">
+        <div class="back-link" onclick="loadHome()">← Volver al blog</div>
+        <h2 class="editor-title" id="editor-heading">Nueva publicación</h2>
+
+        <div class="error-msg hidden" id="editor-error"></div>
+
+        <div class="form-group">
+          <label for="editor-title-input">Título</label>
+          <input type="text" id="editor-title-input"
+                 placeholder="Un título memorable…" maxlength="120" />
+        </div>
+
+        <div class="form-group">
+          <label for="editor-content-input">Contenido</label>
+          <textarea id="editor-content-input"
+                    placeholder="Escribe tu historia aquí…"
+                    rows="10"></textarea>
+        </div>
+
+        <div class="editor-actions">
+          <button class="btn btn-secondary" onclick="loadHome()">Cancelar</button>
+          <button class="btn btn-primary" onclick="submitPost()">Publicar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PÁGINA: REGISTRO
+       ============================================================ -->
+  <div id="page-register" class="page">
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <h2>Crear cuenta</h2>
+        <p class="subtitle">Únete y empieza a publicar.</p>
+
+        <div class="error-msg hidden"   id="reg-error"></div>
+        <div class="success-msg hidden" id="reg-ok"></div>
+
+        <div class="form-group">
+          <label for="reg-name">Nombre completo</label>
+          <input type="text" id="reg-name" placeholder="Tu nombre" autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="correo@ejemplo.com" autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password"
+                 placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm">Confirmar contraseña</label>
+          <input type="password" id="reg-confirm"
+                 placeholder="Repite tu contraseña" autocomplete="new-password" />
+        </div>
+
+        <button class="btn btn-primary" onclick="submitRegister()">Crear cuenta</button>
+
+        <div class="form-footer">
+          ¿Ya tienes cuenta?
+          <a href="#" onclick="showPage('login');return false">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PÁGINA: LOGIN
+       ============================================================ -->
+  <div id="page-login" class="page">
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <h2>Iniciar sesión</h2>
+        <p class="subtitle">Accede a tu cuenta para continuar.</p>
+
+        <div class="error-msg hidden" id="login-error"></div>
+
+        <div class="form-group">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email"
+                 placeholder="correo@ejemplo.com" autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password"
+                 placeholder="Tu contraseña" autocomplete="current-password" />
+        </div>
+
+        <button class="btn btn-primary" onclick="submitLogin()">Entrar</button>
+
+        <div class="form-footer">
+          ¿No tienes cuenta?
+          <a href="#" onclick="showPage('register');return false">Regístrate gratis</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <strong>Mi Blog Personal</strong> — Proyecto académico · HTML + CSS + JS
+  </footer>
+
+  <!-- Toast de notificaciones -->
+  <div id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+
+</body>
+</html>
